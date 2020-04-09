@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Random;
 
 import javax.swing.Timer;
 import javax.swing.ImageIcon;
@@ -28,6 +29,13 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 	
 	private Timer timer;
 	private int delay = 100;
+	private int [] foodX = {25,50,75,100,125,150,175,200,225,250,275,300,325,350,375,400,425,450,475,500,525,550,575,600,625,650,675,700,725,750,775,800,825,850};
+	private int [] foodY = {75,100,125,150,175,200,225,250,275,300,325,350,375,400,425,450,475,500,525,550,575,600,625};
+	
+	private ImageIcon foodImage;
+	private Random random = new Random();
+	private int xPosition = random.nextInt(34);
+	private int yPosition = random.nextInt(23);
 	
 	public Game() {
 		addKeyListener(this);
@@ -83,6 +91,15 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 				snakebodyimg.paintIcon(this, graphic, snakeX[i], snakeY[i]);
 			}
 		}
+		
+		foodImage = new ImageIcon("food.png");
+		
+		if((foodX[xPosition] == snakeX[0]) && foodY[yPosition] == snakeY[0]) {
+			snakelength++;
+			xPosition = random.nextInt(34);
+			yPosition = random.nextInt(23);
+		}
+		foodImage.paintIcon(this, graphic, foodX[xPosition], foodY[yPosition]);
 		
 		graphic.dispose();
 	}
