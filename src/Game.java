@@ -49,10 +49,10 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 		}
 		//game border
 		graphic.setColor(Color.WHITE);
-		graphic.drawRect(20, 20, 850, 625);
+		graphic.drawRect(20, 20, 851, 630);
 		//background
 		graphic.setColor(Color.BLACK);
-		graphic.drawRect(21, 21, 848, 623);
+		graphic.fillRect(21, 21, 850, 629);
 		
 		rightimg = new ImageIcon("right.png");
 		rightimg.paintIcon(this, graphic, snakeX[0], snakeY[0]);
@@ -88,14 +88,137 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+	public void actionPerformed(ActionEvent action) {
+		timer.start();
+			if(right) {
+				for(int i = snakelength-1; i>=0; i--) {
+					snakeY[i+1] = snakeY[i];
+				}
+				for(int i = snakelength; i>=0; i--) {
+					if(i==0) {
+						snakeX[i] = snakeX[i] + 25;
+					} else {
+						snakeX[i] = snakeX[i-1];
+					}
+					if(snakeX[i] > 850) {
+						snakeX[i] = 25;
+					}
+				}
+				repaint();
+			}
+		
+			if(left) {
+				for(int i = snakelength-1; i>=0; i--) {
+					snakeY[i+1] = snakeY[i];
+				}
+				for(int i = snakelength; i>=0; i--) {
+					if(i==0) {
+						snakeX[i] = snakeX[i] - 25;
+					} else {
+						snakeX[i] = snakeX[i-1];
+					}
+					if(snakeX[i] < 25) {
+						snakeX[i] = 850;
+					}
+				}
+				repaint();
+			}
+	
+			if(up) {
+				for(int i = snakelength-1; i>=0; i--) {
+					snakeX[i+1] = snakeX[i];
+				}
+				for(int i = snakelength; i>=0; i--) {
+					if(i==0) {
+						snakeY[i] = snakeY[i] - 25;
+					} else {
+						snakeY[i] = snakeY[i-1];
+					}
+					if(snakeY[i] < 25) {
+						snakeY[i] = 625;
+					}
+				}
+				repaint();
+			}
+	
+			if(down) {
+				for(int i = snakelength-1; i>=0; i--) {
+					snakeX[i+1] = snakeX[i];
+				}
+				for(int i = snakelength; i>=0; i--) {
+					if(i==0) {
+						snakeY[i] = snakeY[i] + 25;
+					} else {
+						snakeY[i] = snakeY[i-1];
+					}
+					if(snakeY[i] > 625) {
+						snakeY[i] = 25;
+					}
+				}
+				repaint();
+			}
+
+
 		
 	}
 
 	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+	public void keyPressed(KeyEvent event) {
+		if(event.getKeyCode() == KeyEvent.VK_RIGHT) {
+			move++;
+			right = true;
+			//prevent snake from going opposite direction to prevent collision
+			if(!left) {
+				right = true;
+			} else {
+				right = false;
+				left = true;
+			}
+			up= false; 
+			down = false;
+		}
+		
+		if(event.getKeyCode() == KeyEvent.VK_LEFT) {
+			move++;
+			left = true;
+			//prevent snake from going opposite direction to prevent collision
+			if(!right) {
+				left = true;
+			} else {
+				left = false;
+				right = true;
+			}
+			up= false; 
+			down = false; 
+		}
+		
+		if(event.getKeyCode() == KeyEvent.VK_UP) {
+			move++;
+			up = true;
+			//prevent snake from going opposite direction to prevent collision
+			if(!down) {
+				up = true;
+			} else {
+				up = false;
+				down = true;
+			}
+			right= false; 
+			left = false;
+		}
+		
+		if(event.getKeyCode() == KeyEvent.VK_DOWN) {
+			move++;
+			down = true;
+			//prevent snake from going opposite direction to prevent collision
+			if(!up) {
+				down = true;
+			} else {
+				up = true;
+				down = false;
+			}
+			right= false; 
+			left = false;
+		}
 		
 	}
 
