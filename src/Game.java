@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,8 +25,9 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 	private ImageIcon leftimg;
 	private ImageIcon rightimg;
 	private ImageIcon snakebodyimg;
-	private int snakelength = 3;
+	private int snakelength = 1;
 	private int move = 0;
+	private boolean gameOver = false;
 	
 	private Timer timer;
 	private int delay = 100;
@@ -36,6 +38,8 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 	private Random random = new Random();
 	private int xPosition = random.nextInt(34);
 	private int yPosition = random.nextInt(23);
+	
+	private int score = 0;
 	
 	public Game() {
 		addKeyListener(this);
@@ -61,6 +65,10 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 		//background
 		graphic.setColor(Color.BLACK);
 		graphic.fillRect(21, 21, 850, 629);
+		//score
+		graphic.setColor(Color.WHITE);
+		graphic.setFont(new Font("arial", Font.PLAIN, 14));
+		graphic.drawString("Score: " + score, 25, 35);
 		
 		rightimg = new ImageIcon("right.png");
 		rightimg.paintIcon(this, graphic, snakeX[0], snakeY[0]);
@@ -95,12 +103,39 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 		foodImage = new ImageIcon("food.png");
 		
 		if((foodX[xPosition] == snakeX[0]) && foodY[yPosition] == snakeY[0]) {
+			score++;
 			snakelength++;
 			xPosition = random.nextInt(34);
 			yPosition = random.nextInt(23);
 		}
 		foodImage.paintIcon(this, graphic, foodX[xPosition], foodY[yPosition]);
 		
+		if(gameOver == true) {
+			right = false;
+			left = false;
+			up = false;
+			down = false;
+			graphic.setColor(Color.WHITE);
+			graphic.setFont(new Font("arial", Font.BOLD, 50));
+			graphic.drawString("Game Over", 300, 300);
+			graphic.setFont(new Font("arial", Font.BOLD, 20));
+			graphic.drawString("Press ENTER to restart", 350, 340);
+		}
+		
+		for(int i = 1; i <snakelength; i++) {
+			if(snakeX[i] == snakeX[0] && snakeY[i] == snakeY[0]) {
+				right = false;
+				left = false;
+				up = false;
+				down = false;
+				graphic.setColor(Color.WHITE);
+				graphic.setFont(new Font("arial", Font.BOLD, 50));
+				graphic.drawString("Game Over", 300, 300);
+				graphic.setFont(new Font("arial", Font.BOLD, 20));
+				graphic.drawString("Press ENTER to restart", 350, 340);
+			}
+			
+		}
 		graphic.dispose();
 	}
 
@@ -117,8 +152,12 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 					} else {
 						snakeX[i] = snakeX[i-1];
 					}
-					if(snakeX[i] > 850) {
-						snakeX[i] = 25;
+					if(snakeX[i] > 825) {
+						right = false;
+						left = false;
+						up = false;
+						down = false;
+						gameOver=true;
 					}
 				}
 				repaint();
@@ -135,7 +174,11 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 						snakeX[i] = snakeX[i-1];
 					}
 					if(snakeX[i] < 25) {
-						snakeX[i] = 850;
+						right = false;
+						left = false;
+						up = false;
+						down = false;
+						gameOver=true;
 					}
 				}
 				repaint();
@@ -152,7 +195,11 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 						snakeY[i] = snakeY[i-1];
 					}
 					if(snakeY[i] < 25) {
-						snakeY[i] = 625;
+						right = false;
+						left = false;
+						up = false;
+						down = false;
+						gameOver=true;
 					}
 				}
 				repaint();
@@ -169,18 +216,27 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 						snakeY[i] = snakeY[i-1];
 					}
 					if(snakeY[i] > 625) {
-						snakeY[i] = 25;
+						right = false;
+						left = false;
+						up = false;
+						down = false;
+						gameOver=true;
 					}
 				}
 				repaint();
-			}
-
-
-		
+			}		
 	}
 
 	@Override
 	public void keyPressed(KeyEvent event) {
+		if(event.getKeyCode() == KeyEvent.VK_ENTER) {
+			move = 0;
+			score = 0;
+			snakelength = 1;
+			gameOver = false;
+			repaint();
+		}
+		
 		if(event.getKeyCode() == KeyEvent.VK_RIGHT) {
 			move++;
 			right = true;
