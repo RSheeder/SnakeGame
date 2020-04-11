@@ -152,7 +152,7 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 					} else {
 						snakeX[i] = snakeX[i-1];
 					}
-					if(snakeX[i] > 825) {
+					if(snakeX[i] > 850) {
 						right = false;
 						left = false;
 						up = false;
